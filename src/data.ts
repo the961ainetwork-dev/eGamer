@@ -44,7 +44,8 @@ export const INITIAL_TOURNAMENTS: Tournament[] = [
       { id: "m2_2", round: 2, teamA: "Sentinels Elite", teamB: "Paper Rex Bounce", status: "scheduled", time: "14:45 UTC" },
       
       { id: "m3_1", round: 3, teamA: "Winner Semi 1", teamB: "Winner Semi 2", status: "scheduled", time: "16:00 UTC" }
-    ]
+    ],
+    tags: ["5v5", "Tactical Shooter", "Competitive"]
   },
   {
     id: "tourney_lol_2",
@@ -52,7 +53,7 @@ export const INITIAL_TOURNAMENTS: Tournament[] = [
     game: "League of Legends",
     format: "Swiss",
     prizeLimit: 1200,
-    entryFee: 15,
+    entryFee: 0,
     maxTeams: 8,
     status: "upcoming",
     participants: [
@@ -61,7 +62,8 @@ export const INITIAL_TOURNAMENTS: Tournament[] = [
       { id: "team_c", name: "GenG Juniors", ranking: 2050, members: ["Chovy", "Kiin", "Canyon", "Peyz", "Lehends"] },
       { id: "team_d", name: "Hanwha Life Juniors", ranking: 1900, members: ["Zeka", "Viper", "Delight", "Doran", "Peanut"] }
     ],
-    matches: []
+    matches: [],
+    tags: ["5v5", "MOBA", "Free to Enter"]
   },
   {
     id: "tourney_rl_3",
@@ -82,7 +84,24 @@ export const INITIAL_TOURNAMENTS: Tournament[] = [
       { id: "rl_m1", round: 1, teamA: "Vitality Stars", teamB: "BDS Flight", scoreA: 4, scoreB: 3, winnerId: "rl_1", status: "completed", time: "09:00 UTC" },
       { id: "rl_m2", round: 1, teamA: "Karmine Kop", teamB: "G2 Strikers", scoreA: 1, scoreB: 4, winnerId: "rl_3", status: "completed", time: "09:30 UTC" },
       { id: "rl_m3", round: 2, teamA: "Vitality Stars", teamB: "G2 Strikers", scoreA: 4, scoreB: 2, winnerId: "rl_1", status: "completed", time: "10:00 UTC" }
-    ]
+    ],
+    tags: ["1v1", "Arcade", "Competitive"]
+  },
+  {
+    id: "tourney_apex_4",
+    name: "Apex Legends Survival Showdown",
+    game: "Indie Game",
+    format: "Swiss",
+    prizeLimit: 800,
+    entryFee: 0,
+    maxTeams: 8,
+    status: "upcoming",
+    participants: [
+      { id: "apex_1", name: "TSM Cadets", ranking: 1900, members: ["ImperialHal", "Verhulst", "Repslg"] },
+      { id: "apex_2", name: "DarkZero Junior", ranking: 1850, members: ["Zer0", "Genburten", "Sikes"] }
+    ],
+    matches: [],
+    tags: ["Battle Royale", "Free to Enter", "Survival"]
   }
 ];
 

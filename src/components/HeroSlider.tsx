@@ -127,9 +127,8 @@ export default function HeroSlider({ onNavigate }: HeroSliderProps) {
           />
         </AnimatePresence>
         
-        {/* Dark futuristic neon overlay vignette */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/35 z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-transparent z-10" />
+        {/* Solid dark overlay for clean text legibility without gradients */}
+        <div className="absolute inset-0 bg-black/65 z-10" />
         
         {/* Subtle cyan-indigo ambient bloom shadows inside the slider */}
         <div className="absolute right-[10%] top-[10%] w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none select-none z-10" />

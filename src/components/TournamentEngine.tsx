@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tournament, Match, Participant } from '../types';
-import { Trophy, AlertCircle, ShieldAlert, Upload, CheckCircle2, User, HelpCircle, Users, Sparkles, Filter, Search } from 'lucide-react';
+import { Trophy, AlertCircle, ShieldAlert, Upload, CheckCircle2, User, HelpCircle, Users, Sparkles, Filter, Search, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface TournamentEngineProps {
@@ -27,6 +27,77 @@ export default function TournamentEngine({
   const [showRegisterModal, setShowRegisterModal] = useState<boolean>(false);
   const [registerTeamName, setRegisterTeamName] = useState<string>('');
   const [bracketSearchQuery, setBracketSearchQuery] = useState<string>('');
+  const [tourneySearch, setTourneySearch] = useState<string>('');
+  const [selectedTag, setSelectedTag] = useState<string>('All');
+
+  const spawnQuickTournament = () => {
+    // Generate templates representing either Valorant or Rocket League
+    const isValorantTemplate = Math.random() > 0.5;
+
+    if (isValorantTemplate) {
+      const newId = `qt_val_${Date.now()}`;
+      const quickValTourney: Tournament = {
+        id: newId,
+        name: `⚡ Valorant Swiftplay Blitz #${Math.floor(Math.random() * 900) + 100}`,
+        game: 'Valorant',
+        format: 'Single Elimination',
+        prizeLimit: 300,
+        entryFee: 0,
+        maxTeams: 8,
+        status: 'active',
+        tags: ['5v5', 'Tactical Shooter', 'Free to Enter'],
+        participants: [
+          { id: "qt_p1", name: `${username}'s Stars`, ranking: 1820, members: [username, "Zephyr", "Axe", "Shadow", "Riot"] },
+          { id: "qt_p2", name: "Paper Rex Gen Z", ranking: 1780, members: ["f0rsaken", "mindfreak", "d4v41", "something", "Jinggg"] },
+          { id: "qt_p3", name: "Sentinels Cadets", ranking: 1850, members: ["TenZ", "Zellsis", "Johnqt", "Sacy", "Zekken"] },
+          { id: "qt_p4", name: "Fnatic Rising", ranking: 1710, members: ["Boaster", "Chronicle", "Derke", "Leo", "Alfajer"] },
+          { id: "qt_p5", name: "G2 Ascents", ranking: 1690, members: ["trent", "valyn", "JonahP", "leaf", "icy"] },
+          { id: "qt_p6", name: "Team Liquid Dust", ranking: 1750, members: ["Scream", "Nivera", "Soulcas", "L1nk", "Jamppi"] },
+          { id: "qt_p7", name: "NaVi Future", ranking: 1680, members: ["Shao", "Zyppan", "SUYGETSU", "ANGE1", "Ardiis"] },
+          { id: "qt_p8", name: "KRÜ Fire Jr", ranking: 1620, members: ["keznit", "mzn", "Klaus", "Melser", "Shyy"] }
+        ],
+        matches: [
+          { id: "m1_1", round: 1, teamA: `${username}'s Stars`, teamB: "KRÜ Fire Jr", scoreA: 13, scoreB: 8, winnerId: "team_1", status: "completed", time: "10:00 UTC" },
+          { id: "m1_2", round: 1, teamA: "Sentinels Cadets", teamB: "NaVi Future", scoreA: 13, scoreB: 11, winnerId: "team_2", status: "completed", time: "10:30 UTC" },
+          { id: "m1_3", round: 1, teamA: "Paper Rex Gen Z", teamB: "Team Liquid Dust", scoreA: 13, scoreB: 9, winnerId: "team_6", status: "completed", time: "11:00 UTC" },
+          { id: "m1_4", round: 1, teamA: "G2 Ascents", teamB: "Fnatic Rising", scoreA: 10, scoreB: 13, winnerId: "team_5", status: "completed", time: "11:30 UTC" },
+          { id: "m2_1", round: 2, teamA: `${username}'s Stars`, teamB: "Fnatic Rising", status: "active", time: "12:30 UTC" },
+          { id: "m2_2", round: 2, teamA: "Sentinels Cadets", teamB: "Paper Rex Gen Z", status: "scheduled", time: "13:15 UTC" },
+          { id: "m3_1", round: 3, teamA: "Winner Semi 1", teamB: "Winner Semi 2", status: "scheduled", time: "14:00 UTC" }
+        ]
+      };
+
+      setTournaments([quickValTourney, ...tournaments]);
+      setSelectedTournamentId(newId);
+    } else {
+      const newId = `qt_rl_${Date.now()}`;
+      const quickRlTourney: Tournament = {
+        id: newId,
+        name: `⚡ Rocket League Instant 1v1 #${Math.floor(Math.random() * 900) + 100}`,
+        game: 'Rocket League',
+        format: 'Double Elimination',
+        prizeLimit: 150,
+        entryFee: 0,
+        maxTeams: 4,
+        status: 'active',
+        tags: ['1v1', 'Arcade', 'Free to Enter'],
+        participants: [
+          { id: "qt_rl1", name: `${username} Solo`, ranking: 2150, members: [username] },
+          { id: "qt_rl2", name: "Vitality Solos", ranking: 2100, members: ["Zen"] },
+          { id: "qt_rl3", name: "Karmine Juniors", ranking: 1950, members: ["Vatira"] },
+          { id: "qt_rl4", name: "G2 Strikers Squad", ranking: 1920, members: ["Daniel"] }
+        ],
+        matches: [
+          { id: "rl_m1", round: 1, teamA: `${username} Solo`, teamB: "G2 Strikers Squad", scoreA: 4, scoreB: 2, winnerId: "rl_1", status: "completed", time: "12:00 UTC" },
+          { id: "rl_m2", round: 1, teamA: "Vitality Solos", teamB: "Karmine Juniors", status: "active", time: "12:30 UTC" },
+          { id: "rl_m3", round: 2, teamA: `${username} Solo`, teamB: "Winner Match 2", status: "scheduled", time: "13:00 UTC" }
+        ]
+      };
+
+      setTournaments([quickRlTourney, ...tournaments]);
+      setSelectedTournamentId(newId);
+    }
+  };
   
   const currentTournament = tournaments.find(t => t.id === selectedTournamentId) || tournaments[0];
 
@@ -73,7 +144,7 @@ export default function TournamentEngine({
 
   // Look up connections for the active tournament is either absolute valorant showdown (8 teams) or rocket league (4 teams)
   const getConnections = () => {
-    if (selectedTournamentId === 'tourney_val_1') {
+    if (selectedTournamentId === 'tourney_val_1' || selectedTournamentId.startsWith('qt_val')) {
       return [
         { from: 'm1_1', to: 'm2_1', slot: 'A' },
         { from: 'm1_4', to: 'm2_1', slot: 'B' },
@@ -82,7 +153,7 @@ export default function TournamentEngine({
         { from: 'm2_1', to: 'm3_1', slot: 'A' },
         { from: 'm2_2', to: 'm3_1', slot: 'B' }
       ];
-    } else if (selectedTournamentId === 'tourney_rl_3') {
+    } else if (selectedTournamentId === 'tourney_rl_3' || selectedTournamentId.startsWith('qt_rl')) {
       return [
         { from: 'rl_m1', to: 'rl_m3', slot: 'A' },
         { from: 'rl_m2', to: 'rl_m3', slot: 'B' }
@@ -295,6 +366,29 @@ export default function TournamentEngine({
   // Group matches by rounds for clean bracket view
   const activeDisputedMatches = currentTournament.matches.filter(m => m.status === 'disputed');
 
+  // Filter tournaments using search terms and selected tag
+  const filteredTournaments = tournaments.filter(t => {
+    const matchesSearch = t.name.toLowerCase().includes(tourneySearch.toLowerCase()) ||
+                          t.game.toLowerCase().includes(tourneySearch.toLowerCase()) ||
+                          t.format.toLowerCase().includes(tourneySearch.toLowerCase()) ||
+                          (t.tags && t.tags.some(tag => tag.toLowerCase().includes(tourneySearch.toLowerCase())));
+
+    if (selectedTag === 'All') return matchesSearch;
+
+    let matchesTag = false;
+    if (selectedTag === 'Free to Enter') {
+      matchesTag = t.entryFee === 0 || (t.tags && t.tags.some(tag => tag.toLowerCase() === 'free to enter'));
+    } else if (selectedTag === '1v1') {
+      matchesTag = (t.tags && t.tags.some(tag => tag.toLowerCase() === '1v1')) || t.name.toLowerCase().includes('1v1');
+    } else if (selectedTag === 'Battle Royale') {
+      matchesTag = (t.tags && t.tags.some(tag => tag.toLowerCase() === 'battle royale')) || t.name.toLowerCase().includes('battle royale');
+    } else {
+      matchesTag = t.tags && t.tags.some(tag => tag.toLowerCase() === selectedTag.toLowerCase());
+    }
+
+    return matchesSearch && matchesTag;
+  });
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6" id="tournament-engine">
       {/* Side selector & quick stats */}
@@ -304,35 +398,116 @@ export default function TournamentEngine({
             <Filter className="w-5 h-5 text-indigo-400" />
             <h3 className="font-semibold text-slate-100">Live Tournaments</h3>
           </div>
-          <div className="space-y-3" id="tourney-selectors">
-            {tournaments.map(t => (
+
+          {/* Quick Tournament instant spawn */}
+          <button
+            onClick={spawnQuickTournament}
+            className="w-full mb-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/15 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-mono tracking-wide"
+            id="btn-quick-spawn-tournament"
+          >
+            <Zap className="w-3.5 h-3.5 fill-white" />
+            <span>QUICK SPAWN BRACKET</span>
+          </button>
+
+          {/* Search bar */}
+          <div className="relative mb-3.5" id="tourney-search-container">
+            <input
+              type="text"
+              placeholder="Search tournaments..."
+              value={tourneySearch}
+              onChange={(e) => setTourneySearch(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 pl-9 pr-8 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+              id="input-tourney-search"
+            />
+            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5" />
+            {tourneySearch && (
               <button
-                key={t.id}
-                onClick={() => { setSelectedTournamentId(t.id); setSelectedMatch(null); }}
-                className={`w-full text-left p-3.5 rounded-lg transition-all border ${
-                  selectedTournamentId === t.id
-                    ? 'bg-indigo-950/40 border-indigo-500 text-indigo-100'
-                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-300'
-                }`}
-                id={`btn-tourney-${t.id}`}
+                onClick={() => setTourneySearch('')}
+                className="absolute right-2.5 top-2 hover:text-slate-200 text-slate-500 text-xs font-semibold focus:outline-none"
+                id="btn-clear-tourney-search"
               >
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs uppercase font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                    {t.game}
-                  </span>
-                  <span className={`text-[10px] uppercase font-bold tracking-wider ${
-                    t.status === 'active' ? 'text-amber-400' : t.status === 'completed' ? 'text-emerald-400' : 'text-blue-400'
-                  }`}>
-                    {t.status}
-                  </span>
-                </div>
-                <h4 className="font-semibold text-sm line-clamp-1 mb-2">{t.name}</h4>
-                <div className="flex justify-between items-center text-xs text-slate-500 font-mono">
-                  <span>Pool: ${t.prizeLimit}</span>
-                  <span>Fee: ${t.entryFee}</span>
-                </div>
+                ✕
               </button>
-            ))}
+            )}
+          </div>
+
+          {/* Tag filter selector options */}
+          <div className="mb-4" id="tourney-tags-container">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block mb-2 font-mono">
+              Filter by Tag
+            </span>
+            <div className="flex flex-wrap gap-1.5 pt-0.5">
+              {['All', '1v1', 'Battle Royale', 'Free to Enter'].map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => setSelectedTag(tag)}
+                  className={`px-2.5 py-1 rounded text-[11px] font-medium transition-all ${
+                    selectedTag === tag
+                      ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/20'
+                      : 'bg-slate-950/80 border border-slate-800 text-slate-400 hover:text-slate-300 hover:border-slate-700'
+                  }`}
+                  id={`btn-tag-filter-${tag.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3" id="tourney-selectors">
+            {filteredTournaments.length === 0 ? (
+              <div className="text-center py-6 px-4 bg-slate-950/40 rounded-lg border border-dashed border-slate-800/80">
+                <p className="text-xs text-slate-500">No tournaments match your criteria.</p>
+                <button
+                  onClick={() => { setTourneySearch(''); setSelectedTag('All'); }}
+                  className="mt-3 text-[11px] font-mono font-semibold text-indigo-400 hover:text-indigo-300 hover:underline focus:outline-none"
+                  id="btn-reset-filters"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            ) : (
+              filteredTournaments.map(t => (
+                <button
+                  key={t.id}
+                  onClick={() => { setSelectedTournamentId(t.id); setSelectedMatch(null); }}
+                  className={`w-full text-left p-3.5 rounded-lg transition-all border ${
+                    selectedTournamentId === t.id
+                      ? 'bg-indigo-950/40 border-indigo-500 text-indigo-100'
+                      : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-300'
+                  }`}
+                  id={`btn-tourney-${t.id}`}
+                >
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-xs uppercase font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                      {t.game}
+                    </span>
+                    <span className={`text-[10px] uppercase font-bold tracking-wider ${
+                      t.status === 'active' ? 'text-amber-400' : t.status === 'completed' ? 'text-emerald-400' : 'text-blue-400'
+                    }`}>
+                      {t.status}
+                    </span>
+                  </div>
+                  <h4 className="font-semibold text-sm line-clamp-1 mb-2">{t.name}</h4>
+
+                  {/* Elegant tag list display */}
+                  {t.tags && t.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-2.5">
+                      {t.tags.map(tag => (
+                        <span key={tag} className="text-[9px] font-mono px-1.5 py-0.5 bg-slate-900 border border-slate-800 text-slate-400 rounded">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center text-xs text-slate-500 font-mono">
+                    <span>Pool: ${t.prizeLimit}</span>
+                    <span>Fee: {t.entryFee === 0 ? 'FREE' : `$${t.entryFee}`}</span>
+                  </div>
+                </button>
+              ))
+            )}
           </div>
         </div>
 

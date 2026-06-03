@@ -41,7 +41,8 @@ import {
   CheckCircle2, 
   X,
   History,
-  Brain
+  Brain,
+  ChevronDown
 } from 'lucide-react';
 
 export default function App() {
@@ -53,6 +54,7 @@ export default function App() {
   
   // Navigation tabs
   const [activeTab, setActiveTab] = useState<'home' | 'tournaments' | 'lms' | 'dev_hub' | 'coaching' | 'wallet' | 'prd' | 'curriculum'>('home');
+  const [isPracticeDropdownOpen, setIsPracticeDropdownOpen] = useState(false);
 
   // Notification lists
   const [notifications, setNotifications] = useState([
@@ -145,22 +147,72 @@ export default function App() {
           >
             AI Strategy Curriculum
           </button>
-          <button
-            onClick={() => setActiveTab('dev_hub')}
-            className={`px-3 py-1.5 rounded-md font-medium transition ${
-              activeTab === 'dev_hub' ? 'bg-slate-900 text-indigo-400 border border-slate-800' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Indie Showcase Hub
-          </button>
-          <button
-            onClick={() => setActiveTab('coaching')}
-            className={`px-3 py-1.5 rounded-md font-medium transition ${
-              activeTab === 'coaching' ? 'bg-slate-900 text-indigo-400 border border-slate-800' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Pro Mechanics Draw
-          </button>
+
+          {/* Practice Your Skills Dropdown Menu */}
+          <div className="relative" id="practice-skills-dropdown-container">
+            <button
+              onClick={() => setIsPracticeDropdownOpen(!isPracticeDropdownOpen)}
+              className={`px-3 py-1.5 rounded-md font-medium transition flex items-center gap-1.5 ${
+                activeTab === 'dev_hub' || activeTab === 'coaching'
+                  ? 'bg-slate-900 text-indigo-400 border border-indigo-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/55'
+              }`}
+              id="btn-nav-practice-skills"
+            >
+              <span>Practice Your Skills</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isPracticeDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isPracticeDropdownOpen && (
+              <>
+                {/* Backdrop transparency clickable layout overlay */}
+                <div 
+                  className="fixed inset-0 z-40" 
+                  onClick={() => setIsPracticeDropdownOpen(false)} 
+                />
+                
+                <div 
+                  className="absolute left-0 mt-2 bg-slate-900 border border-slate-800 rounded-lg p-1.5 w-52 shadow-2xl z-50 text-xs text-slate-300 space-y-1 divide-y divide-slate-800/40"
+                  id="practice-skills-dropdown-menu"
+                >
+                  <div className="pb-1">
+                    <span className="px-2.5 py-1 text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest block">CHOOSE WORKSPACE</span>
+                  </div>
+                  <div className="pt-1.5 space-y-1">
+                    <button
+                      onClick={() => {
+                        setActiveTab('dev_hub');
+                        setIsPracticeDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-2.5 py-1.5 rounded-md transition flex items-center gap-2 ${
+                        activeTab === 'dev_hub'
+                          ? 'bg-indigo-600 text-white font-semibold'
+                          : 'hover:bg-slate-850 hover:text-slate-100 text-slate-400 font-medium'
+                      }`}
+                    >
+                      <Gamepad2 className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Indie Showcase</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveTab('coaching');
+                        setIsPracticeDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-2.5 py-1.5 rounded-md transition flex items-center gap-2 ${
+                        activeTab === 'coaching'
+                          ? 'bg-indigo-600 text-white font-semibold'
+                          : 'hover:bg-slate-850 hover:text-slate-100 text-slate-400 font-medium'
+                      }`}
+                    >
+                      <Target className="w-3.5 h-3.5 text-rose-400" />
+                      <span>Mechanics and Drills</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
           <button
             onClick={() => setActiveTab('wallet')}
             className={`px-3 py-1.5 rounded-md font-medium transition ${
@@ -328,31 +380,44 @@ export default function App() {
                 <span>AI Strategy Curriculum</span>
               </button>
 
-              <button
-                onClick={() => setActiveTab('dev_hub')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                  activeTab === 'dev_hub' 
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10' 
-                    : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
-                }`}
-                id="btn-nav-dev_hub"
-              >
-                <Gamepad2 className="w-4 h-4" />
-                <span>Indie Showcase Hub</span>
-              </button>
+              {/* Practice Your Skills Labeled Group Panel */}
+              <div className="pt-2 pb-1 border-t border-slate-800/40" id="sidebar-practice-section">
+                <div className="flex items-center justify-between px-2 pb-2">
+                  <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5 font-mono">
+                    <Target className="w-3.5 h-3.5 text-indigo-400" />
+                    Practice Your Skills
+                  </span>
+                  <span className="text-[9px] bg-indigo-950/80 text-indigo-300 border border-indigo-800/30 px-1.5 py-0.5 rounded font-mono font-semibold uppercase tracking-tight">ACTIVE</span>
+                </div>
+                
+                <div className="pl-3 border-l border-slate-800 space-y-1 ml-2" id="sidebar-practice-submenu">
+                  <button
+                    onClick={() => setActiveTab('dev_hub')}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
+                      activeTab === 'dev_hub' 
+                        ? 'bg-indigo-600/90 text-white shadow-md shadow-indigo-600/10 font-bold' 
+                        : 'text-slate-450 hover:bg-slate-800/45 hover:text-slate-200'
+                    }`}
+                    id="btn-nav-dev_hub"
+                  >
+                    <Gamepad2 className="w-4 h-4 text-cyan-400" />
+                    <span>Indie Showcase</span>
+                  </button>
 
-              <button
-                onClick={() => setActiveTab('coaching')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                  activeTab === 'coaching' 
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10' 
-                    : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
-                }`}
-                id="btn-nav-coaching"
-              >
-                <Target className="w-4 h-4" />
-                <span>Mechanics &amp; Drills</span>
-              </button>
+                  <button
+                    onClick={() => setActiveTab('coaching')}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition ${
+                      activeTab === 'coaching' 
+                        ? 'bg-indigo-600/90 text-white shadow-md shadow-indigo-600/10 font-bold' 
+                        : 'text-slate-450 hover:bg-slate-800/45 hover:text-slate-200'
+                    }`}
+                    id="btn-nav-coaching"
+                  >
+                    <Target className="w-4 h-4 text-rose-450" />
+                    <span>Mechanics and Drills</span>
+                  </button>
+                </div>
+              </div>
 
               <button
                 onClick={() => setActiveTab('wallet')}

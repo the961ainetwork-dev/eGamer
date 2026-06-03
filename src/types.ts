@@ -53,6 +53,7 @@ export interface Tournament {
   maxTeams: number;
   status: 'upcoming' | 'active' | 'completed';
   matches: Match[];
+  tags?: string[];
 }
 
 export interface QuizQuestion {
