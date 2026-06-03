@@ -1,0 +1,6 @@
+{
+  "name": "Esports Academy & Tournament Hub",
+  "description": "An all-in-one gaming and game development platform featuring active bracket tournaments, specialized LMS academies, indie game showcases, interactive tactical whiteboards, and coaching booking systems.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
